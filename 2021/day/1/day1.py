@@ -1,4 +1,5 @@
 """
+Day 1
 """
 
 
@@ -47,5 +48,7 @@ if __name__ == '__main__':
     # Load txt file to list
     with open("input.txt", "r") as file:
         measurements = [int(element) for element in file.read().splitlines()]
+    # Part 1
     print(part1(measurements))
+    # Part 2
     print(part2(measurements))
