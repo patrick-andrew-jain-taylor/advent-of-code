@@ -25,5 +25,5 @@ def difference(measures):
 if __name__ == '__main__':
     # Load txt file to list
     with open("input.txt", "r") as file:
-        measurements = file.read().splitlines()
+        measurements = [int(element) for element in file.read().splitlines()]
     print(part1(measurements))
