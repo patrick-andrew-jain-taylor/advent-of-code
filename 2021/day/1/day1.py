@@ -16,7 +16,7 @@ def main():
         second > first
         for first, second
         in zip(
-            measurements[:-2],
+            measurements[:-1],
             measurements[1:]
         )
     )
