@@ -1,26 +1,29 @@
 """
-How many measurements are larger than the previous measurement?
 """
 
 
-def main():
+def part1(measures):
     """
-
+    How many measurements are larger than the previous measurement?
+    :param measures: Data to be differed.
     :return: Number of measurements larger than previous
     """
-    # Load txt file to list
-    with open("input.txt", "r") as file:
-        measurements = file.read().splitlines()
-    # Loop over list
+    return difference(measures)
+
+
+def difference(measures):
     return sum(
         second > first
         for first, second
         in zip(
-            measurements[:-1],
-            measurements[1:]
+            measures[:-1],
+            measures[1:]
         )
     )
 
 
 if __name__ == '__main__':
-    print(main())
+    # Load txt file to list
+    with open("input.txt", "r") as file:
+        measurements = file.read().splitlines()
+    print(part1(measurements))
