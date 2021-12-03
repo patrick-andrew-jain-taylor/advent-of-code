@@ -34,7 +34,7 @@ class Submarine:
 
     def __str__(self):
         """Print representation of submarine"""
-        return f"Horz Pos: {self.horz_pos} | Depth: {self.depth}"
+        return f"{self.horz_pos * self.depth}"
 
     def move(self, moves):
         """Move submarine based on input"""
@@ -47,11 +47,11 @@ class Submarine:
 
     def __up(self, unit):
         """Moves submarine up"""
-        self.depth += unit
+        self.depth -= unit
 
     def __down(self, unit):
         """Moves submarine down"""
-        self.depth -= unit
+        self.depth += unit
 
 
 def main():
@@ -60,7 +60,7 @@ def main():
         moves = [element for element in file.read().splitlines()]
     for move in moves:
         submarine.move(move)
-    print(submarine)
+    print(repr(submarine), submarine)
 
 
 if __name__ == '__main__':
