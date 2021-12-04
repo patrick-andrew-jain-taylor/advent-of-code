@@ -67,7 +67,7 @@ class Submarine:
 def main():
     submarine = Submarine(0, 0, 0)
     with open("input.txt", "r") as file:
-        moves = [element for element in file.read().splitlines()]
+        moves = list(file.read().splitlines())
     for move in moves:
         submarine.move(move)
     print(repr(submarine), submarine)
