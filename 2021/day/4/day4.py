@@ -10,7 +10,7 @@ class BingoCard:
 
     def __init__(self, card: list[list[str]]):
         self.card = card
-        self.bingo = {letter: row for letter, row in zip('BINGO', copy.deepcopy(card))}
+        self.bingo = dict(zip('BINGO', copy.deepcopy(card)))
 
     def __repr__(self):
         return '\n'.join('\t'.join(row) for row in self.card)
