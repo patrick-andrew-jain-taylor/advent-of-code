@@ -38,8 +38,12 @@ def part2(conditions):
     print(int(oxygen[0], 2) * int(co2[0], 2))
 
 
-if __name__ == '__main__':
+def main():
     with open("input.txt", "r") as file:
         elements = list(file.read().splitlines())
     part1(elements)
     part2(elements)
+
+
+if __name__ == '__main__':
+    main()
