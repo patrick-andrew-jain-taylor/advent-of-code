@@ -44,7 +44,7 @@ def part2(measures):
     return difference(sum_three(measures))
 
 
-if __name__ == '__main__':
+def main():
     # Load txt file to list
     with open("input.txt", "r") as file:
         measurements = [int(element) for element in file.read().splitlines()]
@@ -52,3 +52,7 @@ if __name__ == '__main__':
     print(part1(measurements))
     # Part 2
     print(part2(measurements))
+
+
+if __name__ == '__main__':
+    main()
