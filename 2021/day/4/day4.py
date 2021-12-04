@@ -41,7 +41,7 @@ class BingoCard:
             for i, number in enumerate(self.bingo[letter]):
                 if number == draw:
                     self.bingo[letter][i] = 'X'
-        return self.check_win()
+        return draw
 
     def final_score(self, draw):
         """
@@ -54,23 +54,29 @@ class BingoCard:
 def part1(draw_order, cards):
     for draw in draw_order:
         for card in cards:
-            if card.draw(draw):
+            card.draw(draw)
+            if card.check_win():
                 print(card.final_score(int(draw)))
                 exit()
 
 
 def part2(draw_order, cards):
     for draw in draw_order:
+        # Draw First
         for card in cards:
-            if card.draw(draw):
+            card.draw(draw)
+        # Remove Second
+        for card in cards:
+            if card.check_win():
                 cards.remove(card)
                 if not cards:
                     print(card.final_score(int(draw)))
                     exit()
+    exit(1)
 
 
 def main():
-    with open("test.txt", "r") as file:
+    with open("input.txt", "r") as file:
         cards = list(file.read().splitlines())
     # Grab Draw
     draw_order = cards.pop(0).split(',')
