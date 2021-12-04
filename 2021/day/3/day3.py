@@ -13,7 +13,7 @@ def part1(conditions):
     print(int(gamma, 2) * int(epsilon, 2))
 
 
-def part2(conditions):  # TODO: I hate this implementation -- fix with a fresh set of eyes.
+def part2(conditions):
     # Process of elimination binaries
     # Oxygen
     oxygen = conditions
