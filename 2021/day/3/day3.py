@@ -40,6 +40,6 @@ def part2(conditions):
 
 if __name__ == '__main__':
     with open("input.txt", "r") as file:
-        elements = [element for element in file.read().splitlines()]
+        elements = list(file.read().splitlines())
     part1(elements)
     part2(elements)
