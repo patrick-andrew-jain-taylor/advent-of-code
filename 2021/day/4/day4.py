@@ -65,7 +65,6 @@ def part2(draw_order, cards):
             if card.draw(draw):
                 cards.remove(card)
                 if not cards:
-                    print(card)
                     print(card.final_score(int(draw)))
                     exit()
 
