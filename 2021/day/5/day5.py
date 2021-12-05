@@ -17,6 +17,25 @@ class OceanFloor:
     def __str__(self):
         return '\n'.join(''.join(row) for row in self.floor)
 
+    def __diag_line(self, left, right):
+        """
+        Take action on the diagonal.
+        :return:
+        """
+        horz_range = (
+            range(int(left[0]), int(right[0]) + 1)
+            if int(left[0]) < int(right[0])
+            else range(int(left[0]), int(right[0]) - 1, -1)
+        )
+        vert_range = (
+            range(int(left[1]), int(right[1]) + 1)
+            if int(left[1]) < int(right[1])
+            else range(int(left[1]), int(right[1]) - 1, -1)
+        )
+        for i, j in zip(horz_range, vert_range):
+            self.floor[j][i] = '1' if self.floor[j][i] == '.' else f'{int(self.floor[j][i]) + 1}'
+        return self.floor
+
     def __horz_line(self, left, right):
         """
         Take action on the horizontal.
@@ -51,7 +70,7 @@ class OceanFloor:
         elif left[1] == right[1]:
             self.__horz_line(left, right)
         else:
-            return self.floor
+            self.__diag_line(left, right)
 
     def danger(self):
         """
