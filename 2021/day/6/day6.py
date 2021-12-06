@@ -40,7 +40,9 @@ class LanternFish:
 
     def __init__(self, age=8):
         self.age = age
-        self.timer = chain([i for i in range(int(age), -1, -1)], cycle([i for i in range(6, -1, -1)]))
+        self.timer = chain(
+            list(range(int(age), -1, -1)), cycle(list(range(6, -1, -1)))
+        )
 
     def __next__(self):
         self.prev = self.age
