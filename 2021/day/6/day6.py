@@ -13,11 +13,14 @@ class LanternSchool:
     def __init__(self, start):
         self.school = [LanternFish(age) for age in start.split(',')]
 
+    def new_fish(self, fish):
+        next(fish)
+        if fish.age == 6 and fish.prev == 0:
+            self.school.append(LanternFish())
+
     def __next__(self):
         for fish in self.school:
-            next(fish)
-            if fish.age == 6 and fish.prev == 0:
-                self.school.append(LanternFish())
+            self.new_fish(fish)
         return self
 
     def __repr__(self):
