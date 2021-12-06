@@ -2,8 +2,6 @@
 Day 5
 """
 
-from itertools import cycle, chain
-
 
 class LanternSchool:
     """
@@ -11,26 +9,30 @@ class LanternSchool:
     """
 
     def __init__(self, start):
-        self.school = [LanternFish(age) for age in start.split(',')]
-
-    def new_fish(self, fish):
-        next(fish)
-        if fish.age == 6 and fish.prev == 0:
-            self.school.append(LanternFish())
+        self.school = [LanternFish(age) for age in range(9)]
+        for age in start.split(','):
+            self.school[int(age)].add_fish(1)
 
     def __next__(self):
-        for fish in self.school:
-            self.new_fish(fish)
+        # Track 0 count
+        reset_count = self.school[0].count
+        # All counts shift
+        for i in range(1, len(self.school)):
+            self.school[i - 1].count = self.school[i].count
+        # Add new 8 to end of list
+        self.school[8].count = reset_count
+        # 0 becomes 6
+        self.school[6].add_fish(reset_count)
         return self
 
     def __repr__(self):
-        return ','.join(str(fish) for fish in self.school)
+        return ','.join(str(fish.count) for fish in self.school)
 
     def __str__(self):
-        return ','.join(str(fish) for fish in self.school)
+        return ','.join(str(fish.count) for fish in self.school)
 
     def total(self):
-        return len(self.school)
+        return sum(fish.count for fish in self.school)
 
 
 class LanternFish:
@@ -38,15 +40,12 @@ class LanternFish:
     Implementation of a lanternfish running on q cycle.
     """
 
-    def __init__(self, age=8):
+    def __init__(self, age, count=0):
         self.age = age
-        self.timer = chain(
-            list(range(int(age), -1, -1)), cycle(list(range(6, -1, -1)))
-        )
+        self.count = count
 
-    def __next__(self):
-        self.prev = self.age
-        self.age = next(self.timer)
+    def add_fish(self, count):
+        self.count += count
         return self
 
     def __repr__(self):
@@ -60,7 +59,7 @@ def main():
     with open("input.txt", "r") as file:
         ages = file.read().strip()
     fishes = LanternSchool(ages)
-    for _ in range(81):
+    for _ in range(256):
         next(fishes)
     print(fishes.total())
 
