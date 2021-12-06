@@ -14,14 +14,10 @@ class LanternSchool:
             self.school[int(age)].add_fish(1)
 
     def __next__(self):
-        # Track 0 count
         reset_count = self.school[0].count
-        # All counts shift
         for i in range(1, len(self.school)):
             self.school[i - 1].count = self.school[i].count
-        # Add new 8 to end of list
         self.school[8].count = reset_count
-        # 0 becomes 6
         self.school[6].add_fish(reset_count)
         return self
 
@@ -37,7 +33,7 @@ class LanternSchool:
 
 class LanternFish:
     """
-    Implementation of a lanternfish running on q cycle.
+    Implementation of a lanternfish.
     """
 
     def __init__(self, age, count=0):
