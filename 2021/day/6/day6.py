@@ -1,0 +1,64 @@
+"""
+Day 5
+"""
+
+from itertools import cycle, chain
+
+
+class LanternSchool:
+    """
+    Implementation of a school of lanternfish.
+    """
+
+    def __init__(self, start):
+        self.school = [LanternFish(age) for age in start.split(',')]
+
+    def __next__(self):
+        for fish in self.school:
+            next(fish)
+            if fish.age == 6 and fish.prev == 0:
+                self.school.append(LanternFish())
+        return self
+
+    def __repr__(self):
+        return ','.join(str(fish) for fish in self.school)
+
+    def __str__(self):
+        return ','.join(str(fish) for fish in self.school)
+
+    def total(self):
+        return len(self.school)
+
+
+class LanternFish:
+    """
+    Implementation of a lanternfish running on q cycle.
+    """
+
+    def __init__(self, age=8):
+        self.age = age
+        self.timer = chain([i for i in range(int(age), -1, -1)], cycle([i for i in range(6, -1, -1)]))
+
+    def __next__(self):
+        self.prev = self.age
+        self.age = next(self.timer)
+        return self
+
+    def __repr__(self):
+        return str(self.age)
+
+    def __str__(self):
+        return str(self.age)
+
+
+def main():
+    with open("input.txt", "r") as file:
+        ages = file.read().strip()
+    fishes = LanternSchool(ages)
+    for _ in range(81):
+        next(fishes)
+    print(fishes.total())
+
+
+if __name__ == '__main__':
+    main()
