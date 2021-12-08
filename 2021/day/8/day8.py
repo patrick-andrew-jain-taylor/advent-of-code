@@ -15,17 +15,18 @@ class SevenSegment:
     def determine_digits(self):
         for key in [''.join(p) for p in itertools.permutations('abcdefg')]:
             digits = {
-                0: f'{key[0:3]}{key[4:7]}',
+                0: f'{key[:3]}{key[4:7]}',
                 1: f'{key[2]}{key[5]}',
                 2: f'{key[0]}{key[2:5]}{key[6]}',
                 3: f'{key[0]}{key[2:4]}{key[5:7]}',
                 4: f'{key[1:4]}{key[5]}',
-                5: f'{key[0:2]}{key[3]}{key[5:7]}',
-                6: f'{key[0:2]}{key[3:7]}',
+                5: f'{key[:2]}{key[3]}{key[5:7]}',
+                6: f'{key[:2]}{key[3:7]}',
                 7: f'{key[0]}{key[2]}{key[5]}',
                 8: f'{key}',
-                9: f'{key[0:4]}{key[5:7]}'
+                9: f'{key[:4]}{key[5:7]}',
             }
+
             if sorted([''.join(sorted(pattern)) for pattern in digits.values()]) == sorted(self.patterns):
                 return digits
 
