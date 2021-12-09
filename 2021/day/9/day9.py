@@ -37,10 +37,9 @@ def determine_low_points(heatmap):
                 if heatmap[i][j] < heatmap[i - 1][j] and heatmap[i][j] < heatmap[i + 1][j] and heatmap[i][j] < \
                         heatmap[i][j - 1]:
                     heatlist.append({'i': i, 'j': j, 'risk': heatmap[i][j] + 1})
-            else:  # Up, Left, Down, Right
-                if heatmap[i][j] < heatmap[i - 1][j] and heatmap[i][j] < heatmap[i][j - 1] and heatmap[i][j] < \
+            elif heatmap[i][j] < heatmap[i - 1][j] and heatmap[i][j] < heatmap[i][j - 1] and heatmap[i][j] < \
                         heatmap[i + 1][j] and heatmap[i][j] < heatmap[i][j + 1]:
-                    heatlist.append({'i': i, 'j': j, 'risk': heatmap[i][j] + 1})
+                heatlist.append({'i': i, 'j': j, 'risk': heatmap[i][j] + 1})
     return heatlist
 
 
