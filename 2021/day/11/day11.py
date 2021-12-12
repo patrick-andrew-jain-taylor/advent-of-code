@@ -23,7 +23,7 @@ def get_adjacent_nodes_2d(matrix_2d, y, x):
     :param matrix_2d: 2D matrix
     :param y: Vertical index
     :param x: Horizontal index
-    :return: Dictionary of elements
+    :return: List of elements
     """
     elements = {
         'up': get_element_2d(matrix_2d, y - 1, x),
@@ -39,6 +39,13 @@ def get_adjacent_nodes_2d(matrix_2d, y, x):
 
 
 def flash(matrix_2d, y, x):
+    """
+    Flash all adjacent octopodes to a flashed octopus
+    :param matrix_2d: 2D matrix
+    :param y: Vertical index
+    :param x: Horizontal index
+    :return: Nothing
+    """
     matrix_2d[y][x] = 0
     for neighbor in get_adjacent_nodes_2d(matrix_2d, y, x):
         matrix_2d[neighbor.y][neighbor.x] += 1 if matrix_2d[neighbor.y][neighbor.x] else 0
@@ -47,6 +54,11 @@ def flash(matrix_2d, y, x):
 
 
 def check_flash(matrix_2d):
+    """
+    Check flashes for a given matrix of octopodes
+    :param matrix_2d: 2D matrix
+    :return: Sum of all flashed octopodes in matrix.
+    """
     for y in range(len(matrix_2d)):
         for x in range(len(matrix_2d[0])):
             matrix_2d[y][x] += 1
@@ -57,10 +69,29 @@ def check_flash(matrix_2d):
     return sum(element.count(0) for element in matrix_2d)
 
 
+def check_all_flash(matrix_2d):
+    """
+    Check if all octopuses flashed.
+    :param matrix_2d: 2D matrix
+    :return: Boolean
+    """
+    for line in matrix_2d:
+        for digit in line:
+            if digit != 0:
+                return True
+    return False
+
+
 def main():
     with open("input.txt", "r") as file:
         octopodes = [[int(digit) for digit in line] for line in file.read().splitlines()]
-    print(sum(check_flash(octopodes) for _ in range(100)))
+    count, sum_flash = 0, 0
+    while check_all_flash(octopodes):
+        count += 1
+        if count == 100:
+            print(sum_flash)  # Part 1
+        sum_flash += check_flash(octopodes)
+    print(count)  # Part 2
 
 
 if __name__ == '__main__':
