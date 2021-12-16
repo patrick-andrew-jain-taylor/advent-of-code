@@ -81,7 +81,7 @@ class CaveSystem:
 
 def main():
     with open("input.txt", "r") as file:
-        system = CaveSystem([line for line in file.read().splitlines()])
+        system = CaveSystem(list(file.read().splitlines()))
     print(system.find_paths_part1())  # Part 1
     print(system.find_paths_part2())  # Part 2
 
