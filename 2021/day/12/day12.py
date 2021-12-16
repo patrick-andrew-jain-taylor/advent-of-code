@@ -3,7 +3,6 @@ Day 12
 """
 from collections import defaultdict
 import json
-import copy
 
 
 class CaveSystem:
@@ -11,7 +10,6 @@ class CaveSystem:
         self.system = system
         self.graph = defaultdict(list)
         self._add_edges()
-        self.paths = []
 
     def __repr__(self):
         return json.dumps(self.graph)
@@ -27,36 +25,65 @@ class CaveSystem:
             self._add_edge(*connection.split('-'))
             self._add_edge(*reversed(connection.split('-')))
 
-    def find_paths(self, path=None, visited=None, start='start', end='end'):
+    def find_paths_part1(self, path=None, paths=None, visited=None, start='start', end='end'):
         if path is None:
             path = [start]
+        if paths is None:
+            paths = 0
         if visited is None:
-            visited = [start]
+            visited = {key: 0 for key in self.graph.keys()}
         for neighbor in self.graph[start]:
             if neighbor == 'start':
                 continue
             elif neighbor == 'end':
                 path.append(neighbor)
-                self.paths.append(copy.copy(path))
+                paths += 1
                 path.pop()
                 continue
             else:
                 path.append(neighbor)
-                if neighbor not in visited:
+                if visited[neighbor] <= 0:
                     if neighbor.islower():
-                        visited.append(neighbor)
-                    self.find_paths(path, visited, neighbor, end)
-                    if neighbor == visited[-1]:
-                        visited.pop()
+                        visited[neighbor] += 1
+                    paths = self.find_paths_part1(path, paths, visited, neighbor, end)
+                    visited[neighbor] -= 1
                 path.pop()
-        return self.paths
+        return paths
+
+    def find_paths_part2(self, path=None, paths=None, visited=None, start='start', end='end'):
+        if path is None:
+            path = [start]
+        if paths is None:
+            paths = 0
+        if visited is None:
+            visited = {key: 0 for key in self.graph.keys()}
+        for neighbor in self.graph[start]:
+            if neighbor == 'start':
+                continue
+            elif neighbor == 'end':
+                path.append(neighbor)
+                paths += 1
+                path.pop()
+                continue
+            else:
+                path.append(neighbor)
+                if visited[neighbor] <= 1:
+                    if neighbor.islower():
+                        if visited[neighbor] != 1 or max(visited.values()) < 2:
+                            visited[neighbor] += 1
+                        else:
+                            continue
+                    paths = self.find_paths_part2(path, paths, visited, neighbor, end)
+                    visited[neighbor] -= 1
+                path.pop()
+        return paths
 
 
 def main():
     with open("input.txt", "r") as file:
         system = CaveSystem([line for line in file.read().splitlines()])
-    paths = system.find_paths()
-    print(len(paths))  # Part 1
+    print(system.find_paths_part1())  # Part 1
+    print(system.find_paths_part2())  # Part 2
 
 
 if __name__ == '__main__':
