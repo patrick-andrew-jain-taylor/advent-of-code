@@ -31,8 +31,8 @@ class ThermalCamera:
         paper = [list()]
         if times is None:
             times = len(self.folds)
-        for time in range(times):
-            fold = self.folds[time]
+        for _ in range(times):
+            fold = self.folds[0]
             position = int(fold.position)
             if fold.direction == 'x':
                 paper = [
@@ -50,7 +50,9 @@ class ThermalCamera:
                 for i, j in zip(range(position), range(len(self.paper) - 1, position, -1)):
                     for x in range(len(self.paper[0])):
                         paper[i][x] = '#' if self.paper[i][x] == '#' or self.paper[j][x] == '#' else '.'
+            self.folds.pop(0)
             self.paper = paper
+        return self
 
     def count_dots(self):
         return Counter([position for row in self.paper for position in row]).get('#')
@@ -59,9 +61,8 @@ class ThermalCamera:
 def main():
     with open("input.txt", "r") as file:
         thermal_camera = ThermalCamera(list(file.read().splitlines()))
-    # Part 1
-    thermal_camera.fold_paper(1)
-    print(thermal_camera.count_dots())
+    print(thermal_camera.fold_paper(1).count_dots())  # Part 1
+    print(thermal_camera.fold_paper())  # Part 2
 
 
 if __name__ == '__main__':
