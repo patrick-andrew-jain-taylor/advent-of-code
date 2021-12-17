@@ -15,26 +15,26 @@ class Polymer:
     def __str__(self):
         return self.template
 
-    def _insert(self, polymer, times):
-        if not times:
-            return Counter(polymer[0])
-        times -= 1
-        return \
-            self._insert(f'{polymer[0]}{self.insertion[polymer]}', times) + \
-            self._insert(f'{self.insertion[polymer]}{polymer[1]}', times)
-
     def insert(self, times=1):
-        count = Counter()
         polymers = [self.template[i:i + 2] for i in range(len(self.template) - 1)]
-        for polymer in polymers:
-            count += self._insert(polymer, times)
-        return count + Counter(self.template[-1])
+        pair_count = Counter(polymers)
+        elem_count = Counter(self.template)
+        for _ in range(times):
+            for key, value in list(pair_count.items()):
+                elem = self.insertion[key]
+                elem_count[elem] += value
+                pair_count[key] -= value
+                pair_count[f'{key[0]}{elem}'] += value
+                pair_count[f'{elem}{key[1]}'] += value
+        most, *_, least = elem_count.most_common()
+        return most[1] - least[1]
 
 
 def main():
-    with open("test.txt", "r") as file:
+    with open("input.txt", "r") as file:
         polymer = Polymer(list(file.read().splitlines()))
-    polymer.insert(40)
+    print(polymer.insert(10))  # Part 1
+    print(polymer.insert(40))  # Part 2
 
 
 if __name__ == '__main__':
