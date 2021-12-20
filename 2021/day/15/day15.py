@@ -2,6 +2,7 @@
 Day 15
 """
 from collections import namedtuple
+from queue import PriorityQueue
 import sys
 
 Element = namedtuple('Element', 'element x y')
@@ -9,14 +10,14 @@ Element = namedtuple('Element', 'element x y')
 
 class Chiton:
 
-    def __init__(self, map):
-        self.map = [[int(element) for element in line] for line in map]
+    def __init__(self, risk_map):
+        self.risk_map = [[int(element) for element in line] for line in risk_map]
 
     def __repr__(self):
-        return '\n'.join(''.join(row) for row in self.map)
+        return '\n'.join(''.join(str(row)) for row in self.risk_map)
 
     def __str__(self):
-        return '\n'.join(''.join(row) for row in self.map)
+        return '\n'.join(''.join(str(row)) for row in self.risk_map)
 
     def _get_element_2d(self, y, x):
         """
@@ -25,7 +26,8 @@ class Chiton:
         :param x: Horizontal index
         :return: Element if in range else None
         """
-        return Element(self.map[y][x], x, y) if 0 <= y < len(self.map) and 0 <= x < len(self.map[0]) else None
+        return Element(self.risk_map[y][x], x, y) if 0 <= y < len(self.risk_map) and 0 <= x < len(
+            self.risk_map[0]) else None
 
     def _get_adjacent_nodes_2d(self, y, x):
         """
@@ -46,30 +48,47 @@ class Chiton:
         }
         return [element for element in elements.values() if element]
 
+    def five_times_as_large(self):
+        width = len(self.risk_map[0])
+        height = len(self.risk_map)
+        for i in range(4):
+            for line in self.risk_map:
+                line.extend([x % 9 + 1 for x in line[-width:]])
+            for line in self.risk_map[height * i:height * (i + 1)]:
+                self.risk_map.append([x % 9 + 1 for x in line])
+        return self
+
     def dijkstra_path(self):
-        queue = [self._get_element_2d(y, x) for y in range(len(self.map)) for x in range(len(self.map[y]))]
-        distance = {self._get_element_2d(y, x): sys.maxsize for y in range(len(self.map)) for x in
-                    range(len(self.map[y]))}
-        previous = {self._get_element_2d(y, x): None for y in range(len(self.map)) for x in range(len(self.map[y]))}
-        start, end = self._get_element_2d(0, 0), self._get_element_2d(len(self.map) - 1, len(self.map[0]) - 1)
+        # queue = [self._get_element_2d(y, x) for y in range(len(self.risk_map)) for x in range(len(self.risk_map[y]))]
+        queue = PriorityQueue()
+        distance = {}
+        previous = {}
+        start, end = self._get_element_2d(0, 0), self._get_element_2d(len(self.risk_map) - 1, len(self.risk_map[0]) - 1)
+        for y in range(len(self.risk_map)):
+            for x in range(len(self.risk_map[y])):
+                element = self._get_element_2d(y, x)
+                distance[element] = sys.maxsize
+                previous[element] = None
         distance[start] = 0
-        while queue:
-            min_distance = min(distance[element] for element in queue)
-            u = next(element for element in queue if distance[element] == min_distance)
-            queue.pop(queue.index(u))
-            neighbors = [neighbor for neighbor in self._get_adjacent_nodes_2d(u.y, u.x) if neighbor in queue]
+        queue.put((distance[start], start))
+        while not queue.empty():
+            u = queue.get()[1]
+            neighbors = [neighbor for neighbor in self._get_adjacent_nodes_2d(u.y, u.x)]
             for v in neighbors:
                 alt = distance[u] + v.element
-                if alt < distance[v]:
+                if v not in previous or alt < distance[v]:
                     distance[v] = alt
                     previous[v] = u
+                    queue.put((distance[v], v))
         return distance[end]
 
 
 def main():
     with open("input.txt", "r") as file:
         chiton = Chiton(list(file.read().splitlines()))
-    print(chiton.dijkstra_path())
+    print(chiton.dijkstra_path())  # Part 1
+    chiton.five_times_as_large()
+    print(chiton.dijkstra_path())  # Part 2
 
 
 if __name__ == '__main__':
