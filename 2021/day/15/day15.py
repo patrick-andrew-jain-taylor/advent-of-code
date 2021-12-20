@@ -73,7 +73,7 @@ class Chiton:
         queue.put((distance[start], start))
         while not queue.empty():
             u = queue.get()[1]
-            neighbors = [neighbor for neighbor in self._get_adjacent_nodes_2d(u.y, u.x)]
+            neighbors = list(self._get_adjacent_nodes_2d(u.y, u.x))
             for v in neighbors:
                 alt = distance[u] + v.element
                 if v not in previous or alt < distance[v]:
